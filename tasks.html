@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Tasks</title>
+  </head>
+  <body>
+    <script>
+      const token = localStorage.getItem("token");
+      const authority = localStorage.getItem("authority");
+
+      // if not logged in at all
+      if (!token) {
+        window.location.href = "login.html";
+      }
+
+      // if logged in but not admin
+      if (authority !== "ADMIN") {
+        window.location.href = "login.html"; // or "unauthorized.html"
+      }
+    </script>
+
+    <p>Welcome, <span id="loggedInUser"></span></p>
+
+    <h2>Tasks</h2>
+    <button onclick="loadTasks()">Load Tasks</button>
+    <ul id="taskList"></ul>
+
+    <script>
+      document.getElementById("loggedInUser").textContent =
+        localStorage.getItem("username");
+
+      async function loadTasks() {
+        const token = localStorage.getItem("token");
+
+        const response = await fetch(
+          "http://localhost:8080/security-practice/task",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + token,
+            },
+          },
+        );
+
+        if (response.ok) {
+          const tasks = await response.json();
+
+          const taskList = document.getElementById("taskList");
+          taskList.innerHTML = "";
+
+          tasks.forEach((task) => {
+            const li = document.createElement("li");
+            li.textContent = `${task.title} - ${task.status} - Assigned to: ${task.assignedToUsername} `;
+            taskList.appendChild(li);
+          });
+        } else {
+          alert("Access denied or not logged in");
+        }
+      }
+    </script>
+  </body>
+</html>
