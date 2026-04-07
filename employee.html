@@ -2,18 +2,23 @@
 <html>
   <head>
     <title>My Profile</title>
-    <link rel="stylesheet" href="styles/employee.css"></link>
+    <link rel="stylesheet" href="styles/employee.css" />
   </head>
   <body>
     <script>
       const urlParams = new URLSearchParams(window.location.search);
-      const usernameFromUrl = urlParams.get("username");
+      const employeeIdFromUrl = urlParams.get("id");
+
       const loggedInUsername = localStorage.getItem("username");
+      const loggedInEmployeeId = localStorage.getItem("employeeId");
       const authority = localStorage.getItem("authority");
 
+      // 🔐 Auth guard
       if (
         !loggedInUsername ||
-        (usernameFromUrl !== loggedInUsername && authority !== "ADMIN")
+        (employeeIdFromUrl &&
+          Number(employeeIdFromUrl) !== Number(loggedInEmployeeId) &&
+          authority !== "ADMIN")
       ) {
         window.location.href = "login.html";
       }
@@ -30,13 +35,11 @@
       </div>
 
       <div class="container">
-        <!-- profile card -->
         <div class="card">
-          <h2>My Profile</h2>
+          <h2 id="profileTitle">My Profile</h2>
           <div class="profile-grid" id="profileInfo"></div>
         </div>
 
-        <!-- tasks card -->
         <div class="card">
           <h2>My Tasks</h2>
           <div id="taskList"></div>
@@ -46,7 +49,6 @@
 
     <script>
       const token = localStorage.getItem("token");
-      const employeeId = localStorage.getItem("employeeId");
 
       document.getElementById("loggedInUser").textContent = loggedInUsername;
 
@@ -65,8 +67,10 @@
 
       async function loadEmployee() {
         try {
+          const id = employeeIdFromUrl || localStorage.getItem("employeeId");
+
           const response = await fetch(
-            `http://localhost:8080/security-practice/employees/${employeeId}`,
+            `http://localhost:8080/security-practice/employees/${id}`,
             {
               method: "GET",
               headers: {
@@ -79,9 +83,16 @@
           if (response.ok) {
             const data = await response.json();
 
-            // render profile
+            const isOwnProfile =
+              Number(id) === Number(localStorage.getItem("employeeId"));
+
+            document.getElementById("profileTitle").textContent = isOwnProfile
+              ? "My Profile"
+              : `${data.username}'s Profile`;
+
             const badgeClass =
               data.authority === "ADMIN" ? "badge-admin" : "badge-user";
+
             document.getElementById("profileInfo").innerHTML = `
               <div class="profile-item">
                 <label>Username</label>
@@ -107,14 +118,17 @@
 
             // render tasks
             const taskList = document.getElementById("taskList");
+            taskList.innerHTML = "";
 
             if (data.assignedTasks.length === 0) {
               taskList.innerHTML = `<p class="no-tasks">No tasks assigned</p>`;
             } else {
               data.assignedTasks.forEach((task) => {
                 const statusClass = getStatusClass(task.status);
+
                 const div = document.createElement("div");
                 div.className = "task-item";
+
                 div.innerHTML = `
                   <div class="task-title">
                     ${task.title}
@@ -124,6 +138,7 @@
                     Due: ${task.dueDate} · Assigned by: ${task.assignedByUsername}
                   </div>
                 `;
+
                 taskList.appendChild(div);
               });
             }
