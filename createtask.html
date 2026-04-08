@@ -1,0 +1,158 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Create Task</title>
+    <link rel="stylesheet" href="styles/createtask.css" />
+    <script src="scripts/tasks/createTask.js"></script>
+  </head>
+  <body>
+    <div class="navbar">
+      <h1>Task Manager</h1>
+      <span>Welcome, <strong id="loggedInUser"></strong></span>
+    </div>
+
+    <div class="container">
+      <div class="card">
+        <h2>Create Task</h2>
+
+        <div class="form-group">
+          <label>Title</label>
+          <input type="text" id="title" placeholder="Enter task title" />
+        </div>
+
+        <div class="form-group">
+          <label>Description</label>
+          <textarea
+            id="description"
+            placeholder="Enter task description"
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Status</label>
+          <select id="status">
+            <option value="TODO">TODO</option>
+            <option value="IN_PROGRESS">IN PROGRESS</option>
+            <option value="DONE">DONE</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Due Date</label>
+          <input type="date" id="dueDate" />
+        </div>
+
+        <div class="form-group">
+          <label>Assigned To</label>
+          <select id="assignedTo">
+            <option value="">Select Employee</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Assigned By</label>
+          <select id="assignedBy">
+            <option value="">Select Employee</option>
+          </select>
+        </div>
+
+        <button onclick="createTask()">Create Task</button>
+
+        <div class="message" id="message"></div>
+      </div>
+    </div>
+
+    <script>
+      document.getElementById("loggedInUser").textContent =
+        localStorage.getItem("username");
+
+      async function createTask() {
+        const title = document.getElementById("title").value;
+        const description = document.getElementById("description").value;
+        const status = document.getElementById("status").value;
+        const dueDate = document.getElementById("dueDate").value;
+        const assignedTo = document.getElementById("assignedTo").value;
+        const assignedBy = document.getElementById("assignedBy").value;
+        const message = document.getElementById("message");
+
+        message.className = "message";
+        message.textContent = "";
+
+        if (!title || !assignedTo || !assignedBy) {
+          message.className = "message error";
+          message.textContent =
+            "Title, Assigned To and Assigned By are required";
+          return;
+        }
+
+        const response = await fetch(
+          "http://localhost:8080/security-practice/task",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + token,
+            },
+            body: JSON.stringify({
+              title,
+              description,
+              status,
+              dueDate,
+              assignedTo: parseInt(assignedTo),
+              assignedBy: parseInt(assignedBy),
+            }),
+          },
+        );
+
+        if (response.ok) {
+          message.className = "message success";
+          message.textContent = "Task created successfully!";
+
+          // clear the form
+          document.getElementById("title").value = "";
+          document.getElementById("description").value = "";
+          document.getElementById("status").value = "TODO";
+          document.getElementById("dueDate").value = "";
+          document.getElementById("assignedTo").value = "";
+          document.getElementById("assignedBy").value = "";
+        } else {
+          message.className = "message error";
+          message.textContent = "Failed to create task";
+        }
+      }
+
+      loadEmployees();
+      async function loadEmployees() {
+        const response = await fetch(
+          "http://localhost:8080/security-practice/employees",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + token,
+            },
+          },
+        );
+
+        if (response.ok) {
+          const employees = await response.json();
+
+          const assignedToSelect = document.getElementById("assignedTo");
+          const assignedBySelect = document.getElementById("assignedBy");
+
+          employees.forEach((emp) => {
+            const option1 = document.createElement("option");
+            option1.value = emp.id;
+            option1.textContent = `${emp.firstName} ${emp.lastName} (${emp.username})`;
+            assignedToSelect.appendChild(option1);
+
+            const option2 = document.createElement("option");
+            option2.value = emp.id;
+            option2.textContent = `${emp.firstName} ${emp.lastName} (${emp.username})`;
+            assignedBySelect.appendChild(option2);
+          });
+        }
+      }
+    </script>
+  </body>
+</html>
