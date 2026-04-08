@@ -138,3 +138,19 @@ body {
     transform: rotate(360deg);
   }
 }
+
+.delete-btn {
+  padding: 5px 12px;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-top: 8px;
+}
+
+.delete-btn:hover {
+  background-color: #c0392b;
+}
