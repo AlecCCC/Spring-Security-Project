@@ -131,3 +131,19 @@ tr:hover td {
 #content {
   display: none;
 }
+
+.logout-btn {
+  padding: 8px 16px;
+  background-color: white;
+  color: #3498db;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.logout-btn:hover {
+  background-color: #2980b9;
+  color: white;
+}

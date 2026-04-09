@@ -7,7 +7,29 @@
   <body>
     <div class="navbar">
       <h1>Task Manager</h1>
-      <span>Welcome, <strong id="loggedInUser"></strong></span>
+      <nav id="navLinks" style="display: flex; gap: 15px; align-items: center">
+        <a
+          id="profileLink"
+          href="#"
+          style="color: white; text-decoration: none; font-size: 14px"
+          >My Profile</a
+        >
+        <a
+          id="tasksLink"
+          href="tasks.html"
+          style="
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            display: none;
+          "
+          >Tasks</a
+        >
+      </nav>
+      <span
+        >Welcome, <strong id="loggedInUser"></strong>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+      </span>
     </div>
 
     <div class="container">

@@ -9,14 +9,40 @@
       const token = localStorage.getItem("token");
       const authority = localStorage.getItem("authority");
 
-      if (!token || authority !== "ADMIN") {
+      if (!token) {
         window.location.href = "login.html";
+      }
+
+      if (authority !== "ADMIN") {
+        window.location.href = "employee.html";
       }
     </script>
 
     <div class="navbar">
       <h1>Task Manager</h1>
-      <span>Welcome, <strong id="loggedInUser"></strong></span>
+      <nav id="navLinks" style="display: flex; gap: 15px; align-items: center">
+        <a
+          id="profileLink"
+          href="#"
+          style="color: white; text-decoration: none; font-size: 14px"
+          >My Profile</a
+        >
+        <a
+          id="tasksLink"
+          href="tasks.html"
+          style="
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            display: none;
+          "
+          >Tasks</a
+        >
+      </nav>
+      <span
+        >Welcome, <strong id="loggedInUser"></strong>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+      </span>
     </div>
 
     <div class="container">
@@ -86,15 +112,17 @@
                 div.className = "task-item";
                 div.id = `task-${task.id}`;
                 div.innerHTML = `
-                <div class="task-title">
-                ${task.title}
-                <span class="task-status ${statusClass}">${task.status}</span>
-                </div>
-                <div class="task-meta">
-                Assigned to: ${task.assignedToUsername} · 
-                Assigned by: ${task.assignedByUsername} · 
-                Due: ${task.dueDate}
-                </div>
+                <a href="task.html?id=${task.id}" style="text-decoration: none; color: inherit;">
+                  <div class="task-title">
+                    ${task.title}
+                    <span class="task-status ${statusClass}">${task.status}</span>
+                  </div>
+                  <div class="task-meta">
+                    Assigned to: ${task.assignedToUsername} · 
+                    Assigned by: ${task.assignedByUsername} · 
+                    Due: ${task.dueDate}
+                  </div>
+                </a>
                 <button class="delete-btn" onclick="deleteTask(${task.id})">Delete</button>
             `;
                 taskList.appendChild(div);
