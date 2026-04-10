@@ -3,6 +3,7 @@
   <head>
     <title>Login</title>
     <link rel="stylesheet" href="styles/login.css" />
+    <script src="scripts/employee/login.js" defer></script>
   </head>
   <body>
     <div class="card">
@@ -26,51 +27,5 @@
         Don't have an account? <a href="register.html">Register here</a>
       </div>
     </div>
-
-    <script>
-      async function login() {
-        const username = document.getElementById("username").value;
-        const password = document.getElementById("password").value;
-        const message = document.getElementById("message");
-
-        // reset message
-        message.className = "message";
-        message.textContent = "";
-
-        if (!username || !password) {
-          message.className = "message error";
-          message.textContent = "Please enter username and password";
-          return;
-        }
-
-        const response = await fetch(
-          "http://localhost:8080/security-practice/login",
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ username, password }),
-          },
-        );
-
-        if (response.ok) {
-          const data = await response.json();
-
-          localStorage.setItem("token", data.token);
-          localStorage.setItem("username", data.username);
-          localStorage.setItem("employeeId", data.id);
-          localStorage.setItem("authority", data.authority);
-
-          message.className = "message success";
-          message.textContent = "Login successful! Redirecting...";
-
-          setTimeout(() => {
-            window.location.href = `http://127.0.0.1:5500/employee.html?username=${data.username}`;
-          }, 2000);
-        } else {
-          message.className = "message error";
-          message.textContent = "Invalid username or password";
-        }
-      }
-    </script>
   </body>
 </html>
