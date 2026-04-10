@@ -1,10 +1,16 @@
 const token = localStorage.getItem("token");
 const username = localStorage.getItem("username");
-
-
+const authority = localStorage.getItem("authority")
 
 if (!token) {
   window.location.href = "login.html";
+}
+
+if (authority === "ADMIN") {
+  document.getElementById("tasksLink").style.display = "block";
+  document.getElementById("employeesLink").style.display = "block";
+  document.getElementById("createTaskLink").style.display = "block";
+  
 }
 
 document.getElementById("loggedInUser").textContent = username;
@@ -18,14 +24,12 @@ function getStatusClass(status) {
   }
 }
 
+
 async function loadTask() {
   // Step 1 - get task id from URL
   const urlParams = new URLSearchParams(window.location.search);
   const taskId = urlParams.get("id");
 
-  if (authority === "ADMIN") {
-  document.getElementById("tasksLink").style.display = "block";
-}
 
   if (!taskId) {
     alert("No task ID provided");

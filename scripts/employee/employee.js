@@ -15,6 +15,13 @@ if (
   window.location.href = "login.html";
 }
 
+if (authority === "ADMIN") {
+  document.getElementById("tasksLink").style.display = "block";
+  document.getElementById("employeesLink").style.display = "block";
+  document.getElementById("createTaskLink").style.display = "block";
+  
+}
+
 // set navbar links
 document.getElementById("loggedInUser").textContent = loggedInUsername;
 document.getElementById("profileLink").href = `employee.html?username=${loggedInUsername}`;

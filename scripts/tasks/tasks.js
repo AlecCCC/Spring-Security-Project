@@ -1,8 +1,16 @@
-document.getElementById("loggedInUser").textContent =
-localStorage.getItem("username");
+const token = localStorage.getItem("token");
+const authority = localStorage.getItem("authority");
+const username = localStorage.getItem("username");
+
+document.getElementById("loggedInUser").textContent = username;
+document.getElementById("profileLink").href = `employee.html?username=${username}`;
+
 
 if (authority === "ADMIN") {
   document.getElementById("tasksLink").style.display = "block";
+  document.getElementById("employeesLink").style.display = "block";
+  document.getElementById("createTaskLink").style.display = "block";
+  
 }
 
 function getStatusClass(status) {

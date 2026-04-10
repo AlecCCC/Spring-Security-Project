@@ -1,15 +1,29 @@
 const token = localStorage.getItem("token");
+const username = localStorage.getItem("username");
 const authority = localStorage.getItem("authority");
 
 if (!token || authority !== "ADMIN") {
   window.location.href = "login.html";
 }
 
+document.getElementById("loggedInUser").textContent = username;
+document.getElementById("profileLink").href = `employee.html?username=${username}`;
+
+if (authority === "ADMIN") {
+  document.getElementById("tasksLink").style.display = "block";
+  document.getElementById("employeesLink").style.display = "block";
+  document.getElementById("createTaskLink").style.display = "block";
+}
+
+function logout() {
+  localStorage.removeItem("token");
+  localStorage.removeItem("username");
+  localStorage.removeItem("employeeId");
+  localStorage.removeItem("authority");
+  window.location.href = "login.html";
+}
 
 loadEmployees();
-
-document.getElementById("loggedInUser").textContent =
-  localStorage.getItem("username");
 
 async function loadEmployees() {
   const response = await fetch(
@@ -25,7 +39,6 @@ async function loadEmployees() {
 
   if (response.ok) {
     const employees = await response.json();
-
     const assignedToSelect = document.getElementById("assignedTo");
     const assignedBySelect = document.getElementById("assignedBy");
 
@@ -55,7 +68,7 @@ async function createTask() {
   message.className = "message";
   message.textContent = "";
 
-  if (!title || !assignedTo || assignedTo === "" || !assignedBy || assignedBy === "") {
+  if (!title || assignedTo === "" || assignedBy === "") {
     message.className = "message error";
     message.textContent = "Title, Assigned To and Assigned By are required";
     return;
@@ -88,8 +101,8 @@ async function createTask() {
     document.getElementById("description").value = "";
     document.getElementById("status").value = "TODO";
     document.getElementById("dueDate").value = "";
-    document.getElementById("assignedTo").value = "";
-    document.getElementById("assignedBy").value = "";
+    document.getElementById("assignedTo").selectedIndex = 0;
+    document.getElementById("assignedBy").selectedIndex = 0;
 
   } else {
     message.className = "message error";

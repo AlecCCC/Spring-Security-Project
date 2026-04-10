@@ -3,6 +3,9 @@ localStorage.getItem("username");
 
 if (authority === "ADMIN") {
   document.getElementById("tasksLink").style.display = "block";
+  document.getElementById("employeesLink").style.display = "block";
+  document.getElementById("createTaskLink").style.display = "block";
+  
 }
 
 async function loadEmployees() {

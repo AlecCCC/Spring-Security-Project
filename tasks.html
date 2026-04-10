@@ -6,19 +6,6 @@
     <script src="scripts/tasks/tasks.js" defer></script>
   </head>
   <body>
-    <script>
-      const token = localStorage.getItem("token");
-      const authority = localStorage.getItem("authority");
-
-      if (!token) {
-        window.location.href = "login.html";
-      }
-
-      if (authority !== "ADMIN") {
-        window.location.href = "employee.html";
-      }
-    </script>
-
     <div class="navbar">
       <h1>Task Manager</h1>
       <nav id="navLinks" style="display: flex; gap: 15px; align-items: center">
@@ -28,6 +15,18 @@
           style="color: white; text-decoration: none; font-size: 14px"
           >My Profile</a
         >
+        <a
+          id="createTaskLink"
+          href="createTask.html"
+          style="
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            display: none;
+          "
+        >
+          Create Task
+        </a>
         <a
           id="tasksLink"
           href="tasks.html"
@@ -39,6 +38,18 @@
           "
           >Tasks</a
         >
+        <a
+          id="employeesLink"
+          href="employees.html"
+          style="
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            display: none;
+          "
+        >
+          Employees
+        </a>
       </nav>
       <span
         >Welcome, <strong id="loggedInUser"></strong>
