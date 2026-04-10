@@ -23,6 +23,10 @@ async function loadTask() {
   const urlParams = new URLSearchParams(window.location.search);
   const taskId = urlParams.get("id");
 
+  if (authority === "ADMIN") {
+  document.getElementById("tasksLink").style.display = "block";
+}
+
   if (!taskId) {
     alert("No task ID provided");
     return;

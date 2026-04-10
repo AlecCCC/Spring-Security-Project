@@ -1,6 +1,9 @@
-
 document.getElementById("loggedInUser").textContent =
 localStorage.getItem("username");
+
+if (authority === "ADMIN") {
+  document.getElementById("tasksLink").style.display = "block";
+}
 
 async function loadEmployees() {
 try {

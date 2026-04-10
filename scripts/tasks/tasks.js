@@ -1,6 +1,10 @@
 document.getElementById("loggedInUser").textContent =
 localStorage.getItem("username");
 
+if (authority === "ADMIN") {
+  document.getElementById("tasksLink").style.display = "block";
+}
+
 function getStatusClass(status) {
 switch (status.toLowerCase()) {
     case "todo":
