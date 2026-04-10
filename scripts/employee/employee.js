@@ -7,10 +7,7 @@ const authority = localStorage.getItem("authority");
 const token = localStorage.getItem("token");
 
 if (
-  !loggedInUsername ||
-  (employeeIdFromUrl &&
-    Number(employeeIdFromUrl) !== Number(loggedInEmployeeId) &&
-    authority !== "ADMIN")
+  !loggedInUsername || (employeeIdFromUrl && Number(employeeIdFromUrl) !== Number(loggedInEmployeeId) && authority !== "ADMIN")
 ) {
   window.location.href = "login.html";
 }

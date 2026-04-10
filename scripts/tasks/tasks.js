@@ -1,9 +1,9 @@
 const token = localStorage.getItem("token");
 const authority = localStorage.getItem("authority");
 const username = localStorage.getItem("username");
+const employeeId = localStorage.getItem("employeeId");
 
-document.getElementById("loggedInUser").textContent = username;
-document.getElementById("profileLink").href = `employee.html?username=${username}`;
+document.getElementById("profileLink").href = `employee.html?id=${employeeId}`;
 
 
 if (authority === "ADMIN") {
@@ -25,6 +25,9 @@ switch (status.toLowerCase()) {
     return "status-todo";
 }
 }
+
+document.getElementById("loggedInUser").textContent = username;
+
 
 async function loadTasks() {
 const taskList = document.getElementById("taskList");
